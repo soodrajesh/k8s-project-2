@@ -24,6 +24,8 @@ k8s-project/
 ├── .helmignore
 └── README.md
 
+
+
 ## Configuration
 
 The `values.yaml` file in the `sample-app` chart contains configurable parameters for the application. Modify this file to customize the deployment.
@@ -60,52 +62,86 @@ After deployment, you can access the application using the LoadBalancer URL:
     kubectl get services -n sample-app
     ```
 
-2. Access the application in your browser using the EXTERNAL-IP of the `sample-app-service`.
+2. Access the application in your browser using the `EXTERNAL-IP` of the `sample-app-service`.
 
 ## Components
 
-- **Namespace**: A dedicated namespace `sample-app` is created for the application.
-- **ConfigMap**: The `app-config` ConfigMap contains configuration data for the application.
-- **Secret**: The `app-secret` Secret stores sensitive data such as passwords.
-- **PersistentVolume and PersistentVolumeClaim**: A PersistentVolume `app-pv` and a PersistentVolumeClaim `app-pvc` are configured to provide persistent storage for the application.
-- **Deployment**: The `sample-app` Deployment manages the NGINX pods.
-- **Service**: The `sample-app-service` Service exposes the NGINX pods and provides load balancing.
-- **Ingress**: The `sample-app-ingress` Ingress resource manages external access to the application.
+### Namespace
+A dedicated namespace `sample-app` is created for the application.
+
+### ConfigMap
+The `app-config` ConfigMap contains configuration data for the application.
+
+### Secret
+The `app-secret` Secret stores sensitive data such as passwords.
+
+### PersistentVolume and PersistentVolumeClaim
+A PersistentVolume `app-pv` and a PersistentVolumeClaim `app-pvc` are configured to provide persistent storage for the application.
+
+### Deployment
+The `sample-app` Deployment manages the NGINX pods.
+
+### Service
+The `sample-app-service` Service exposes the NGINX pods and provides load balancing.
+
+### Ingress
+The `sample-app-ingress` Ingress resource manages external access to the application.
 
 ## Troubleshooting
 
-If you encounter issues:
+### Checking Service and Endpoints
 
-- Check pod status:
-
-    ```bash
-    kubectl get pods -n sample-app
-    ```
-
-- View pod logs:
-
-    ```bash
-    kubectl logs <pod-name> -n sample-app
-    ```
-
-- Describe the pod for more details:
-
-    ```bash
-    kubectl describe pod <pod-name> -n sample-app
-    ```
-
-- Check the service and endpoints:
+1. Verify the service exists:
 
     ```bash
     kubectl get services -n sample-app
+    ```
+
+2. Check the endpoints for the service:
+
+    ```bash
     kubectl get endpoints sample-app-service -n sample-app
     ```
 
-- Verify the node status:
+3. Describe the service to check the selector and other details:
+
+    ```bash
+    kubectl describe service sample-app-service -n sample-app
+    ```
+
+### Checking PersistentVolume and PersistentVolumeClaim
+
+1. Verify the PVC status:
+
+    ```bash
+    kubectl get pvc -n sample-app
+    ```
+
+2. Describe the PVC for more details:
+
+    ```bash
+    kubectl describe pvc app-pvc -n sample-app
+    ```
+
+### Node and Resource Issues
+
+1. Describe the node to check its status and resources:
 
     ```bash
     kubectl describe nodes
     ```
+
+2. Check for any taints or conditions that might affect scheduling:
+
+    ```bash
+    kubectl describe node <node-name>
+    ```
+
+### Common Fixes
+
+- **Pod Not Running**: If a pod is not running, check the events section in the pod description for error messages.
+- **Service Not Accessible**: Ensure the service selector matches the pod labels.
+- **PersistentVolume Issues**: Ensure the PV and PVC are correctly bound and have sufficient resources.
 
 ## Cleanup
 
@@ -113,4 +149,3 @@ To remove the application:
 
 ```bash
 helm uninstall sample-app
-
