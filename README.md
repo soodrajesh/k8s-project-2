@@ -1,7 +1,7 @@
 
 # Sample Kubernetes Application with Helm
 
-This project demonstrates deploying a sample NGINX application on Kubernetes using Helm. It includes configurations for namespaces, ConfigMaps, Secrets, PersistentVolumes, PersistentVolumeClaims, Deployments, Services, and Ingress.
+This project demonstrates deploying a sample NGINX application on Kubernetes(K8s) using Helm. It includes configurations for namespaces, ConfigMaps, Secrets, PersistentVolumes, PersistentVolumeClaims, Deployments, Services, and Ingress.
 
 ## Prerequisites
 
